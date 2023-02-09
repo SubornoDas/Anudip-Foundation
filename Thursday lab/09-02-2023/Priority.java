@@ -1,24 +1,24 @@
-package newassisgnment
+package newassignment;
 
 public class Priority extends Thread {
-	public ThreadDemo(String name)
+	public Priority(String name)
 	{
 		super(name);
 	}
 	public void run() {
-		System.out.println("Thread is running !! " + ThreadDemo.currentThread().getName()+"Priority : "+Thread.currentThread().getPriority());
+		System.out.println("Thread is running !! " + Priority.currentThread().getName()+"Priority : "+Thread.currentThread().getPriority());
 	}
 	
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ThreadDemo t1=new ThreadDemo("First-thread");		//new state
-		ThreadDemo t2=new ThreadDemo("Second-thread");		//new state
-		ThreadDemo t3=new ThreadDemo("Third-thread");		//new state
 		
-		t1.start();	//runnable state
-		t2.start();
-		t3.start();
+		Priority p1=new Priority("First-thread");		
+		Priority p2=new Priority("Second-thread");	
+		Priority p3=new Priority("Third-thread");		
+		
+		p1.start();	
+		p2.start();
+		p3.start();
 		
 	}
 
