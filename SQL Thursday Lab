@@ -1,1 +1,138 @@
 
+Scenario: ABC college wants to develop a University Management System (UMS) to store information on students who join their college. The database should contain 
+•	• Student’s personal information as well as student’s academic details. 
+•	• It should store information on subjects taught at the university in various departments. 
+•	• It should also store marks obtained by each student in each semester subject wise as well as the GPA for each semester. 
+
+GPA is a rating calculated in a scale of ten considering the individual subject marks obtained and subjects weightage % in a semester. 
+
+
+ Problem Statement: 
+Using the following and identify the tables and columns needed for University Management System. 
+•	• Student information should have registration_number, name, branch , contact #, DOB, Date of joining, Address, Email id. 
+
+	create table Student_info(Student_Id int,Registration_No int primary key,Student_name varchar(20),Branch varchar(20),Contact_No bigint,DOB date,Date_Of_Joining date,Address varchar(20),Email_Id varchar(20));
+
+	desc Student_info;
+	+-----------------+-------------+------+-----+---------+-------+
+	| Field           | Type        | Null | Key | Default | Extra |
+	+-----------------+-------------+------+-----+---------+-------+
+	| Student_Id      | int         | YES  |     | NULL    |       |
+	| Registration_No | int         | NO   | PRI | NULL    |       |
+	| Student_name    | varchar(20) | YES  |     | NULL    |       |
+	| Branch          | varchar(20) | YES  |     | NULL    |       |
+	| Contact_No      | bigint      | YES  |     | NULL    |       |
+	| DOB             | date        | YES  |     | NULL    |       |
+	| Date_Of_Joining | date        | YES  |     | NULL    |       |
+	| Address         | varchar(20) | YES  |     | NULL    |       |
+	| Email_Id        | varchar(20) | YES  |     | NULL    |       |
+	+-----------------+-------------+------+-----+---------+-------+
+
+After inserting the values
+
+	Insert into Student_info(Student_Id,Registration_No,Student_name,Branch,Contact_No,DOB,Date_Of_Joining,Address,Email_Id)values(101,835204,'Suborno','CSE',6200639596,"1999-01-16","2023-02-22",'Ranchi','subornodas@gmail.com'),(102,835225,'Sabdick','Mechanical',6200639599,"1997-08-02","2023-02-21",'Kolkata','sabdick@gmail.com'),(103,835102,'Pritam','Civil',6200639597,"1999-01-01","2023-02-20",'New York','pritam@gmail.com'),(104,835100,'Sunita','Electrical',6200639598,"1998-01-02","2022-10-20",'Dhanbad','sunita@gmail.com'),(105,835109,'Amrita','Civil',6200639591,"1998-01-03","2023-01-10",'Ranchi','amrita@gmail.com');
+
+
+
+1.Display  students information after updating his/her details.
+
+	select * from Student_info order by Student_id;
++------------+-----------------+--------------+------------+------------+------------+-----------------+----------+----------------------+
+| Student_Id | Registration_No | Student_name | Branch     | Contact_No | DOB        | Date_Of_Joining | Address  | Email_Id             |
++------------+-----------------+--------------+------------+------------+------------+-----------------+----------+----------------------+
+|        101 |          835204 | Suborno      | CSE        | 6200639596 | 1999-01-16 | 2023-02-22      | Ranchi   | subornodas@gmail.com |
+|        102 |          835225 | Sabdick      | Mechanical | 6200639599 | 1997-08-02 | 2023-02-21      | Kolkata  | sabdick@gmail.com    |
+|        103 |          835102 | Pritam       | Civil      | 6200639597 | 1999-01-01 | 2023-02-20      | New York | pritam@gmail.com     |
+|        104 |          835100 | Sunita       | Electrical | 6200639598 | 1998-01-02 | 2022-10-20      | Dhanbad  | sunita@gmail.com     |
+|        105 |          835109 | Amrita       | Civil      | 6200639591 | 1998-01-03 | 2023-01-10      | Ranchi   | amrita@gmail.com     |
++------------+-----------------+--------------+------------+------------+------------+-----------------+----------+----------------------+
+Another  table
+	create table subjects(Subject_code int,subject_1 int,Subject_2 int,Subject_3 int,Semester varchar(10),Reg_No int,foreign key(Reg_No) references Student_info(Registration_No));
+
+	desc subjects;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| Subject_code | int         | YES  |     | NULL    |       |
+| subject_1    | int         | YES  |     | NULL    |       |
+| Subject_2    | int         | YES  |     | NULL    |       |
+| Subject_3    | int         | YES  |     | NULL    |       |
+| Semester     | varchar(10) | YES  |     | NULL    |       |
+| Reg_No       | int         | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+Inserting values in table subjects
+
+	insert into subjects(Subject_code,subject_1,subject_2,subject_3,semester,reg_no)values(001,95,90,97,'Sixth',835204),(002,87,97,75,'Second',835225),(003,82,67,96,'Third',835102),(004,84,81,79,'First',835109),(005,77,88,99,'Fifth',835100);
+
+
+select * from subjects;;
++--------------+-----------+-----------+-----------+----------+--------+
+| Subject_code | subject_1 | Subject_2 | Subject_3 | Semester | Reg_No |
++--------------+-----------+-----------+-----------+----------+--------+
+|            1 |        95 |        90 |        97 | Sixth    | 835204 |
+|            2 |        87 |        97 |        75 | Second   | 835225 |
+|            3 |        82 |        67 |        96 | Third    | 835102 |
+|            4 |        84 |        81 |        79 | First    | 835109 |
+|            5 |        77 |        88 |        99 | Fifth    | 835100 |
++--------------+-----------+-----------+-----------+----------+--------+
+
+2. Display the average marks of all the students.
+
+	select std.student_id,std.student_name,std.branch,subjects.semester,((subject_1+subject_2+subject_3)/3) as Average_marks from std,subjects where std.registration_no=subjects.reg_no;
+
++------------+--------------+------------+----------+---------------+
+| student_id | student_name | branch     | semester | Average_marks |
++------------+--------------+------------+----------+---------------+
+|        104 | Sunita       | Electrical | Fifth    |       88.0000 |
+|        103 | Pritam       | Civil      | Third    |       81.6667 |
+|        105 | Amrita       | Aerospace  | First    |       81.3333 |
+|        101 | Suborno      | CSE        | Sixth    |       94.0000 |
+|        102 | Sabdick      | Mechanical | Second   |       86.3333 |
++------------+--------------+------------+----------+---------------+
+
+Display the average marks of students from a particular branch.
+	select std.student_name,std.address,std.branch,((s.subject_1+s.subject_2+s.subject_3)/3) as Avg_marks from std inner join subjects s on std.registration_no=s.reg_no where branch='cse';
+
+
++--------------+---------+--------+-----------+-----------------|
+| student_name | address | branch | Avg_marks|
++--------------+---------+--------+-----------+----------------|
+| Suborno      | Ranchi  | CSE    |   94.0000 |--------|
++--------------+---------+--------+-----------+----------------|
+
+
+
+ Display the sum of marks of students where semester = 3.
+
+	select std.student_id,std.student_name,std.registration_no,std.branch,std.contact_no,std.address,s.semester,(s.subject_1+s.subject_2+s.subject_3) as Sum from std inner join subjects s on std.registration_no=s.reg_no where semester='third';
+
++------------+--------------+-----------------+--------+------------+----------+----------+------+--------------+---------+|
+| student_id | student_name | registration_no | branch | contact_no | address  | semester | Sum  
++------------+--------------+-----------------+--------+------------+----------+----------+------+----------+---------------|
+|        103 | Pritam     	       |          835102       | Civil      | 6200639597 | New York | Third    |  245 
++------------+--------------+-----------------+--------+------------+----------+----------+------+---------+-----+---------|
+
+Display the reg_no,student name, marks whose sum of marks is greater than 250 .
+	select s.reg_no,std.student_name,s.subject_1,s.subject_2,s.subject_3,(s.subject_1+s.subject_2+s.subject_3) as sum from std inner join subjects s on std.registration_no=s.reg_no where (s.subject_1+s.subject_2+s.subject_3) >250;
+
+
++--------+--------------+-----------+-----------+-----------+------+
+| reg_no | student_name | subject_1 | subject_2 | subject_3 | sum  |
++--------+--------------+-----------+-----------+-----------+------+
+| 835100 | Sunita       |        77 |        88 |        99 |  264 |
+| 835204 | Suborno      |        95 |        90 |        97 |  282 |
+| 835225 | Sabdick      |        87 |        97 |        75 |  259 |
++--------+--------------+-----------+-----------+-----------+------+
+Calculate the percentage for the marks for all the students. Display the reg_no, student_name, branch, semester and percentage.
+	select std.registration_no,std.student_name,std.branch,s.semester,((s.subject_1+s.subject_2+s.subject_3)/3) as Percentage,(((s.subject_1+s.subject_2+s.subject_3)/3)/9.5)as CGPA from std inner join subjects s on std.registration_no=s.reg_no;
++-----------------+--------------+------------+----------+------------+------------+
+| registration_no | student_name | branch     | semester | Percentage | CGPA       |
++-----------------+--------------+------------+----------+------------+------------+
+|          835100 | Sunita       | Electrical | Fifth    |    88.0000 | 9.26315789 |
+|          835102 | Pritam       | Civil      | Third    |    81.6667 | 8.59649123 |
+|          835109 | Amrita       | Aerospace  | First    |    81.3333 | 8.56140351 |
+|          835204 | Suborno      | CSE        | Sixth    |    94.0000 | 9.89473684 |
+|          835225 | Sabdick      | Mechanical | Second   |    86.3333 | 9.08771930 |
++-----------------+--------------+------------+----------+------------+------------+
+
